@@ -26,7 +26,7 @@ public class Counter {
             e.printStackTrace();
         }
     }
-    static String getFileContent(String path){
+    static String getFile(String path){
         try {
             FileInputStream fis = new FileInputStream(new File(path));
             byte[] b = new byte[fis.available()];
@@ -40,9 +40,9 @@ public class Counter {
             return null;
         }
     }
-    static String getURLContent(String url){
+    static String getURL(String url){
         try {
-            return Jsoup.connect(path).get().text();
+            return Jsoup.connect(url).get().text();
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -102,8 +102,8 @@ public class Counter {
         //store( "godrinktea.txt" , getURLContent("http://www.godrinktea.com/"));
         //store( "buddhaspace.txt" , getURLContent("http://buddhaspace.blogspot.com"));
 
-        train( getFileContent("godrinktea.txt"), true);
-        train( getFileContent("buddhaspace.txt"), false);
+        train( getFile("godrinktea.txt"), true);
+        train( getFile("buddhaspace.txt"), false);
 
         System.out.println(  "probability of the word being in buddhaspace is "+calculateProbability("zen") );
     }
