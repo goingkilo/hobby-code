@@ -1,6 +1,6 @@
+package soup;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class TwainSorter {
@@ -52,15 +52,38 @@ public class TwainSorter {
 		for(String file : files){
 			String name = file.split("/")[4];
 			name = name.substring( 0, name.indexOf("."));
-			print(name);
+			//print(name);
 			names.add(name);
 			Counter.store( nub + name, Counter.getURL(file));
 		}
 		return names.toArray( new String[names.size()]);
 	}
 	
+	
+	static void getData() {
+//		String[] storedDickens = pullNStore( "dickens", Arrays.copyOfRange(dickens,0,5));
+//		String[] storedTwain = pullNStore( "twain", Arrays.copyOfRange(twain,0,5));
+		pullNStore( "dickens", new String[]{dickens[9]});//twain6 = 1837 ,dickens[9] = 963
+		
+		
+	}
+	
 	public static void main(String[] args) {
-		String[] storedDickens = pullNStore( "dickens", Arrays.copyOfRange(dickens,0,5));
-		String[] storedTwain = pullNStore( "twain", Arrays.copyOfRange(twain,0,5));
+//		getData();
+		
+		int[] dickens = new int[]{1400,98,730,   766,    580};
+		int[] twains  = new int[]{76, 74, 10947, 19640,  30165 };
+		
+		for(int i : dickens ){
+			Counter.train( Counter.getFile("dickens"+i), true);
+			System.out.println( "trained,d:"+ i);
+		}
+		
+		for(int i : twains ){
+			Counter.train( Counter.getFile("twain"+i), false);
+			System.out.println( "trained,t:"+ i);
+		}
+		float f = Counter.classify( Counter.getFile("twain1837") );
+		System.out.println( "twain book :" + f);
 	}
 }
