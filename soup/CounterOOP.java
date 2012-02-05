@@ -17,8 +17,8 @@ import org.jsoup.Jsoup;
 
 public class CounterOOP {
 
-    Map<String, Integer> category1 ;
-	Map<String, Integer> category2 ;
+    Map<String, Integer> good ;
+	Map<String, Integer> ` ;
 
 	final static String[] specialCharacters = { ",", "#", ";", "\"", "\'", };
 	final static String empty = "";
@@ -27,22 +27,26 @@ public class CounterOOP {
 	final static float PROBABILITY_LOWER_LIMIT = 0.1f;
 	
 	public CounterOOP(){
-		category1 = new HashMap<String, Integer>();
-		category2 = new HashMap<String, Integer>();
+		good = new HashMap<String, Integer>();
+		bad = new HashMap<String, Integer>();
 	}
 	
 	static void print(String s) {
 		System.out.println(s);
 	}
 
-	void store(String fname, String data) {
+	/*
+	 * save date to disk under given file name
+	 */
+	void store(String fname, String data) throws Exception {
 		FileOutputStream fos = null;
 		try {
 			fos = new FileOutputStream(new File(fname));
 			fos.write(data.getBytes());
 			fos.close();
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw e;
+			
 		} finally {
 			try {
 				fos.close();
@@ -51,7 +55,10 @@ public class CounterOOP {
 		}
 	}
 
-	static String getFile(String path) {
+	/*
+	 * get contents of a given file
+	 */
+	String getFile(String path) {
 		FileInputStream fis = null;
 		try {
 			fis = new FileInputStream(new File(path));
@@ -72,6 +79,9 @@ public class CounterOOP {
 		}
 	}
 
+	/*
+	 * download contents of a given url
+	 */
 	String downloadURL(String url) {
 		try {
 			return Jsoup.connect(url).get().text();
@@ -81,6 +91,9 @@ public class CounterOOP {
 		}
 	}
 
+	/*
+	 * sanitize a string be removing special characters
+	 */
 	String takeOutSpecialCharacters(String s) {
 		for (String p : specialCharacters) {
 			s = s.replaceAll(p, empty);
@@ -88,6 +101,9 @@ public class CounterOOP {
 		return s.toLowerCase();
 	}
 
+	/*
+	 * sum up the values of the given map
+	 */
 	int count(Map<String, Integer> map) {
 		int count = 0;
 		for (Integer i : map.values()) {
@@ -96,10 +112,13 @@ public class CounterOOP {
 		return count;
 	}
 
+	/*
+	 * count and store word counts of given text
+	 */
 	void train(String text, boolean first) {
 		String[] tokens = text.split(" ");
 
-		Map<String, Integer> map = first ? category1 : category2;
+		Map<String, Integer> map = first ? good : bad;
 
 		for (String token : tokens) {
 			token = takeOutSpecialCharacters(token);
@@ -112,39 +131,58 @@ public class CounterOOP {
 		}
 	}
 
+	/*
+	 * calculate probability for a single word 
+	 * given pre-calculated(trained) probabilities
+	 */
 	float calculateProbability(String s) {
 		s = takeOutSpecialCharacters(s);
 
 		float pCat1Probability = 0f;
 
 		float cat1Ratio = 0;
-		if (category1.containsKey(s)) {
-			cat1Ratio = (float) (((float) category1.get(s)) / (float) count(category1));
+		if (good.containsKey(s)) {
+			cat1Ratio = (float) (((float) good.get(s)) / (float) count(good));
 		}
 		float cat2Ratio = 0;
-		if (category2.containsKey(s)) {
-			cat2Ratio = (float) (((float) category2.get(s)) / (float) count(category2));
+		if (bad.containsKey(s)) {
+			cat2Ratio = (float) (((float) bad.get(s)) / (float) count(bad));
 		}
 		if (cat1Ratio + cat2Ratio > 0) {
 			pCat1Probability = (cat2Ratio / (cat1Ratio + cat2Ratio));
 		}
 
-		//is there a math function to fix range of a number between upper & lower bounds ? 
-		if (pCat1Probability > PROBABILITY_UPPER_LIMIT)
-			pCat1Probability = PROBABILITY_UPPER_LIMIT;
+		//is there a math function to fix range of a number between upper & lower bounds ?
+		print( "debug:" + pCat1Probability);
 		
-		if (pCat1Probability < PROBABILITY_LOWER_LIMIT)
+		if (pCat1Probability > PROBABILITY_UPPER_LIMIT) {
+			pCat1Probability = PROBABILITY_UPPER_LIMIT;
+		}
+		
+		if (pCat1Probability < PROBABILITY_LOWER_LIMIT) {
 			pCat1Probability = PROBABILITY_LOWER_LIMIT;
+		}
 
 		return pCat1Probability;
 
 	}
 
-	//we are interested in values greater than 0.5
+	/*
+	 * we only want to look at words which have a probabiity
+	 * greater than 0.5
+	 */
 	boolean isInteresting(Float f) {
 		return Math.abs(0.5f - f) > 0;
 	}
 
+	/**
+	 * depending of the boolean, either returns product
+	 * of the elements of the array, or returns
+	 * product of 1 minus each element of the array
+	 * @param Float[] f
+	 * @param boolean oneMinus
+	 * @return float 
+	 */
 	float product(Float[] f, boolean oneMinus) {
 		float a = 1.0f;
 		for (float f1 : f) {
@@ -157,32 +195,36 @@ public class CounterOOP {
 		return a;
 	}
 
+	/**
+	 * calculate probability of the 
+	 * top 15 
+	 * @param text
+	 * @return float
+	 */
 	float classify(String text) {
 		String[] words = text.split(" ");
 
 		Set<String> set = new HashSet<String>();
-
 		for (String word : words) {
 			set.add(takeOutSpecialCharacters(word));
 		}
 
 		List<Float> lProbabilities = new ArrayList<Float>();
-
 		for (String word : set) {
-
 			float f = calculateProbability(word);
 			if (isInteresting(f)) {
 				lProbabilities.add(f);
 			}
 		}
-
+		
 		Collections.sort(lProbabilities, new Comparator<Float>() {
 			@Override
 			public int compare(Float f1, Float f2) {
-				return (int)( 100*f1 - 100*f2 );
+				return (int)( 100*f2 - 100*f1 );	//descending
 			}
 		});
 
+		//get the first fifteen
 		Float[] probabilities = lProbabilities.subList(0, 16).toArray(new Float[15]);
 
 		float product = product(probabilities, false);
@@ -191,6 +233,7 @@ public class CounterOOP {
 		print("[]" + product + "," + oneMinusTerm);
 
 		return (product / (product + oneMinusTerm));
+//		return product;
 	}
 
 	public static void main(String[] args) {
