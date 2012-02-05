@@ -22,7 +22,7 @@ import org.jsoup.Jsoup;
 public class CounterOOP {
 
 	private Map<String, Integer> good = new HashMap<String, Integer>();
-	private Map<String, Integer> bad new HashMap<String, Integer>();
+	private Map<String, Integer> bad =  new HashMap<String, Integer>();
 
 	final static String[] specialCharacters = { ",", "#", ";", "\"", "\'", };
 	final static String empty = "";
