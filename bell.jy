@@ -1,0 +1,44 @@
+
+#
+# meditation timer
+#
+
+from java.lang import Exception as JEException
+from javax.sound.midi import *
+from java.lang import Thread,InterruptedException
+
+def sleep(s):
+	try :
+		Thread.sleep(s)
+	except InterruptedException,e:
+		print 'sleep interrupted'
+	
+
+try :
+	MidiSystem.getSynthesizer()
+
+	synth = MidiSystem.getSynthesizer()
+	synth.open()
+	channels  = synth.getChannels()
+	bank = synth.getDefaultSoundbank();
+	synth.loadAllInstruments(bank)
+	instrs = synth.getLoadedInstruments()
+
+	instr = instrs[306]
+	p = instr.getPatch()
+	channels[0].programChange( p.getBank(), p.getProgram())
+	print 'get it on'
+	channels[0].noteOn( 72, 127 );	
+	sleep(1000)		
+
+	#sleep(10*60*1000)
+
+	channels[0].noteOn( 32, 127 );	
+	sleep(1000)
+
+except JEException,e:
+	print 'Erorr',e
+	from java.lang import System
+	System.exit(0)
+
+
