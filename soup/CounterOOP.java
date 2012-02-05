@@ -14,11 +14,14 @@ import java.util.Map;
 import java.util.Set;
 
 import org.jsoup.Jsoup;
-
+/**
+* simple naive bayes classifier to find out
+* if a given text was written mark twain or not
+*/
 public class CounterOOP {
 
-    Map<String, Integer> good ;
-	Map<String, Integer> ` ;
+	private Map<String, Integer> good ;
+	private Map<String, Integer> bad ;
 
 	final static String[] specialCharacters = { ",", "#", ";", "\"", "\'", };
 	final static String empty = "";
@@ -31,14 +34,13 @@ public class CounterOOP {
 		bad = new HashMap<String, Integer>();
 	}
 	
-	static void print(String s) {
-		System.out.println(s);
-	}
-
 	/*
-	 * save date to disk under given file name
+	 * utility method, creates a file denoted by fname, 
+         * and writes the data to it
+	 * @param String
+  	 * @param String
 	 */
-	void store(String fname, String data) throws Exception {
+	private void store(String fname, String data) throws Exception {
 		FileOutputStream fos = null;
 		try {
 			fos = new FileOutputStream(new File(fname));
@@ -56,9 +58,11 @@ public class CounterOOP {
 	}
 
 	/*
-	 * get contents of a given file
+	 * utility method, reads and returns the contents of a given file path
+	 * @param String
+         * @return String
 	 */
-	String getFile(String path) {
+	private String getFile(String path) {
 		FileInputStream fis = null;
 		try {
 			fis = new FileInputStream(new File(path));
@@ -80,7 +84,9 @@ public class CounterOOP {
 	}
 
 	/*
-	 * download contents of a given url
+	 * downloads and returns the contents of a given url
+	 * @param String
+         * @param String 
 	 */
 	String downloadURL(String url) {
 		try {
@@ -92,9 +98,10 @@ public class CounterOOP {
 	}
 
 	/*
-	 * sanitize a string be removing special characters
+	 * removes special characters from the string
+         * and converts it to lower case
 	 */
-	String takeOutSpecialCharacters(String s) {
+	String simplifyToken(String s) {
 		for (String p : specialCharacters) {
 			s = s.replaceAll(p, empty);
 		}
@@ -121,7 +128,7 @@ public class CounterOOP {
 		Map<String, Integer> map = first ? good : bad;
 
 		for (String token : tokens) {
-			token = takeOutSpecialCharacters(token);
+			token = simplifyToken(token);
 			
 			if (map.containsKey(token)) {
 				map.put(token, map.get(token) + 1);
@@ -136,7 +143,7 @@ public class CounterOOP {
 	 * given pre-calculated(trained) probabilities
 	 */
 	float calculateProbability(String s) {
-		s = takeOutSpecialCharacters(s);
+		s = simplifyToken(s);
 
 		float pCat1Probability = 0f;
 
@@ -153,7 +160,7 @@ public class CounterOOP {
 		}
 
 		//is there a math function to fix range of a number between upper & lower bounds ?
-		print( "debug:" + pCat1Probability);
+		System.out.println( "debug:" + pCat1Probability);
 		
 		if (pCat1Probability > PROBABILITY_UPPER_LIMIT) {
 			pCat1Probability = PROBABILITY_UPPER_LIMIT;
@@ -206,7 +213,7 @@ public class CounterOOP {
 
 		Set<String> set = new HashSet<String>();
 		for (String word : words) {
-			set.add(takeOutSpecialCharacters(word));
+			set.add(simplifyToken(word));
 		}
 
 		List<Float> lProbabilities = new ArrayList<Float>();
@@ -230,7 +237,7 @@ public class CounterOOP {
 		float product = product(probabilities, false);
 		float oneMinusTerm = product(probabilities, true);
 
-		print("[]" + product + "," + oneMinusTerm);
+		System.out.println("[]" + product + "," + oneMinusTerm);
 
 		return (product / (product + oneMinusTerm));
 //		return product;
