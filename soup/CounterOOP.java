@@ -109,7 +109,8 @@ public class CounterOOP {
 	}
 
 	/*
-	 * sum up the values of the given map
+	 * returns the total count of the tokens
+	 * by summing up the instances of their occurence
 	 */
 	int count(Map<String, Integer> map) {
 		int count = 0;
