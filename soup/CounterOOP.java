@@ -17,11 +17,12 @@ import org.jsoup.Jsoup;
 /**
 * simple naive bayes classifier to find out
 * if a given text was written mark twain or not
+* Currently, there are only two categories
 */
 public class CounterOOP {
 
-	private Map<String, Integer> good ;
-	private Map<String, Integer> bad ;
+	private Map<String, Integer> good = new HashMap<String, Integer>();
+	private Map<String, Integer> bad new HashMap<String, Integer>();
 
 	final static String[] specialCharacters = { ",", "#", ";", "\"", "\'", };
 	final static String empty = "";
@@ -29,9 +30,11 @@ public class CounterOOP {
 	final static float PROBABILITY_UPPER_LIMIT = 0.99f;
 	final static float PROBABILITY_LOWER_LIMIT = 0.1f;
 	
-	public CounterOOP(){
-		good = new HashMap<String, Integer>();
-		bad = new HashMap<String, Integer>();
+	public CounterOOP(){}
+
+	public CounterOOP(Map<String,Integer> cat1, Map<String,Integer> cat2) {
+		this.good = cat1;
+		this.bad  = cat2;
 	}
 	
 	/*
@@ -40,7 +43,7 @@ public class CounterOOP {
 	 * @param String
   	 * @param String
 	 */
-	private void store(String fname, String data) throws Exception {
+	private static void store(String fname, String data) throws Exception {
 		FileOutputStream fos = null;
 		try {
 			fos = new FileOutputStream(new File(fname));
@@ -62,7 +65,7 @@ public class CounterOOP {
 	 * @param String
          * @return String
 	 */
-	private String getFile(String path) {
+	private static String getFile(String path) {
 		FileInputStream fis = null;
 		try {
 			fis = new FileInputStream(new File(path));
@@ -88,7 +91,7 @@ public class CounterOOP {
 	 * @param String
          * @param String 
 	 */
-	String downloadURL(String url) {
+	private static String downloadURL(String url) {
 		try {
 			return Jsoup.connect(url).get().text();
 		} catch (IOException e) {
@@ -101,7 +104,7 @@ public class CounterOOP {
 	 * removes special characters from the string
          * and converts it to lower case
 	 */
-	String simplifyToken(String s) {
+	private String simplifyToken(String s) {
 		for (String p : specialCharacters) {
 			s = s.replaceAll(p, empty);
 		}
@@ -112,7 +115,9 @@ public class CounterOOP {
 	 * returns the total count of the tokens
 	 * by summing up the instances of their occurence
 	 */
-	int count(Map<String, Integer> map) {
+	private int tokenCountPerCategory(boolean flagGood) {
+		Map<String, Integer> map = flagGood ? good : bad ;
+
 		int count = 0;
 		for (Integer i : map.values()) {
 			count += i;
@@ -123,10 +128,10 @@ public class CounterOOP {
 	/*
 	 * count and store word counts of given text
 	 */
-	void train(String text, boolean first) {
+	public void train(String text, boolean flagGood) {
 		String[] tokens = text.split(" ");
 
-		Map<String, Integer> map = first ? good : bad;
+		Map<String, Integer> map = flagGood ? good : bad;
 
 		for (String token : tokens) {
 			token = simplifyToken(token);
@@ -143,18 +148,18 @@ public class CounterOOP {
 	 * calculate probability for a single word 
 	 * given pre-calculated(trained) probabilities
 	 */
-	float calculateProbability(String s) {
+	public float calculateProbability(String s) {
 		s = simplifyToken(s);
 
 		float pCat1Probability = 0f;
 
 		float cat1Ratio = 0;
 		if (good.containsKey(s)) {
-			cat1Ratio = (float) (((float) good.get(s)) / (float) count(good));
+			cat1Ratio = (float) (((float) good.get(s)) / (float) tokenCountPerCategory(true));
 		}
 		float cat2Ratio = 0;
 		if (bad.containsKey(s)) {
-			cat2Ratio = (float) (((float) bad.get(s)) / (float) count(bad));
+			cat2Ratio = (float) (((float) bad.get(s)) / (float) tokenCountPerCategory(false));
 		}
 		if (cat1Ratio + cat2Ratio > 0) {
 			pCat1Probability = (cat2Ratio / (cat1Ratio + cat2Ratio));
@@ -176,10 +181,10 @@ public class CounterOOP {
 	}
 
 	/*
-	 * we only want to look at words which have a probabiity
+	 * filter method, we only want to look at words which have a probabiity
 	 * greater than 0.5
 	 */
-	boolean isInteresting(Float f) {
+	private boolean isInteresting(Float f) {
 		return Math.abs(0.5f - f) > 0;
 	}
 
@@ -191,7 +196,7 @@ public class CounterOOP {
 	 * @param boolean oneMinus
 	 * @return float 
 	 */
-	float product(Float[] f, boolean oneMinus) {
+	private float product(Float[] f, boolean oneMinus) {
 		float a = 1.0f;
 		for (float f1 : f) {
 			if (oneMinus) {
@@ -204,12 +209,14 @@ public class CounterOOP {
 	}
 
 	/**
-	 * calculate probability of the 
-	 * top 15 
+	 * classify a text by calculating the likelihood of it being
+         * a work of Mark Twain
+	 * Calculate probability of top fifteen interesting tokens and combine them
+	 *
 	 * @param text
 	 * @return float
 	 */
-	float classify(String text) {
+	public float classify(String text) {
 		String[] words = text.split(" ");
 
 		Set<String> set = new HashSet<String>();
