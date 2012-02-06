@@ -1,4 +1,3 @@
-package soup;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -157,7 +156,7 @@ public class Counter {
 		Collections.sort(problist, new Comparator<Float>() {
 			@Override
 			public int compare(Float f1, Float f2) {
-				return Math.round(interesting(f2) - interesting(f1));
+				return  (int)(100*interesting(f2) - 100*interesting(f1)); //descending order
 			}
 		});
 
@@ -170,20 +169,75 @@ public class Counter {
 
 		return (product / (product + oneMinusTerm));
 	}
+	
+	static String[] pullNStore(String nub, String[] files){
+		List<String> names = new ArrayList<String>();
+		for(String file : files){
+			String name = new File(file).getName();
+			name = name.substring( 0, name.indexOf("."));
+			//print(name);
+			names.add(name);
+			Counter.store( nub + name, Counter.getURL(file));
+		}
+		return names.toArray( new String[names.size()]);
+	}
 
 	public static void main(String[] args) {
-		// store( "godrinktea.txt" ,
-		// getURLContent("http://www.godrinktea.com/"));
-		// store( "buddhaspace.txt" ,
-		// getURLContent("http://buddhaspace.blogspot.com"));
 
-		// train( getFile("godrinktea.txt"), true);
-		// train( getFile("buddhaspace.txt"), false);
-
-		// System.out.println(
-		// "probability of the word being in buddhaspace is "+calculateProbability("zen")
-		// );
-		TwainSorter.main(null);
+		String[] dickens = {"http://www.gutenberg.org/ebooks/1400.txt.utf8",
+				"http://www.gutenberg.org/ebooks/98.txt.utf8",
+				"http://www.gutenberg.org/ebooks/730.txt.utf8",
+				"http://www.gutenberg.org/ebooks/766.txt.utf8",
+				"http://www.gutenberg.org/ebooks/580.txt.utf8",
+				"http://www.gutenberg.org/ebooks/1023.txt.utf8",
+				"http://www.gutenberg.org/ebooks/786.txt.utf8",
+				"http://www.gutenberg.org/files/564/564-0.txt",
+				"http://www.gutenberg.org/ebooks/967.txt.utf8",
+				"http://www.gutenberg.org/ebooks/963.txt.utf8",
+				"http://www.gutenberg.org/ebooks/883.txt.utf8",
+				"http://www.gutenberg.org/ebooks/700.txt.utf8",
+				"http://www.gutenberg.org/ebooks/821.txt.utf8"};
+		
+		String[] twain = {   "http://www.gutenberg.org/ebooks/76.txt.utf8",
+				"http://www.gutenberg.org/ebooks/74.txt.utf8",
+				"http://www.gutenberg.org/ebooks/10947.txt.utf8",
+				"http://www.gutenberg.org/ebooks/19640.txt.utf8",
+				"http://www.gutenberg.org/ebooks/30165.txt.utf8",
+				"http://www.gutenberg.org/ebooks/86.txt.utf8",
+				"http://www.gutenberg.org/ebooks/1837.txt.utf8",
+				"http://www.gutenberg.org/ebooks/3176.txt.utf8",
+				"http://www.gutenberg.org/ebooks/10135.txt.utf8",
+				"http://www.gutenberg.org/ebooks/245.txt.utf8",
+				"http://www.gutenberg.org/ebooks/119.txt.utf8",
+				"http://www.gutenberg.org/ebooks/3177.txt.utf8",
+				"http://www.gutenberg.org/ebooks/8525.txt.utf8",
+				"http://www.gutenberg.org/ebooks/70.txt.utf8",
+				"http://www.gutenberg.org/ebooks/3186.txt.utf8",
+				"http://www.gutenberg.org/ebooks/2895.txt.utf8",
+				"http://www.gutenberg.org/ebooks/142.txt.utf8",
+				"http://www.gutenberg.org/ebooks/3200.txt.utf8",
+				"http://www.gutenberg.org/ebooks/3178.txt.utf8",
+				"http://www.gutenberg.org/ebooks/3250.txt.utf8",
+				"http://www.gutenberg.org/ebooks/102.txt.utf8",
+				"http://www.gutenberg.org/ebooks/3190.txt.utf8",
+				"http://www.gutenberg.org/ebooks/26203.txt.utf8",
+				"http://www.gutenberg.org/ebooks/18381.txt.utf8",
+				"http://www.gutenberg.org/ebooks/3187.txt.utf8"};
+		
+		int[] dickens = new int[]{1400,98,730,   766,    580};
+		int[] twains  = new int[]{76, 74, 10947, 19640,  30165 };
+		
+		for(int i = 0 ; i < 5 ; i++ ) {
+			Counter.train( Counter.getFile(dickens[i]), true);
+			System.out.println( "trained,dickens:"+ i);
+		}
+		
+		for(int i : twains ){
+			Counter.train( Counter.getFile(twain[i]), false);
+			System.out.println( "trained,twain:"+ i);
+		}
+		float f = Counter.classify( Counter.getFile("twain1837") );
+		System.out.println( "is a twain book :" + f);
 	}
 
 }
