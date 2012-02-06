@@ -3,7 +3,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -52,11 +56,36 @@ public class Counter {
 
 	static String getURL(String url) {
 		try {
-			return Jsoup.connect(url).get().text();
-		} catch (IOException e) {
+			URL u = new URL(url);
+			URLConnection uc = u.openConnection();
+			InputStream is = uc.getInputStream();
+			byte[] b =  new byte[is.available()];
+			is.read(b);
+			is.close();
+			return new String(b);
+		} 
+		catch (IOException e) {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	static String[] pullNStore(String nub, String[] urls){
+		List<String> names = new ArrayList<String>();
+		for(String file : urls){
+			String name = new File(file).getName();
+			name = nub + name.substring( 0, name.indexOf("."));
+			names.add(name);
+			
+			if( new File(name).exists() && new File(name).isFile() ) {
+				print( "file exists :" + name);
+				continue;
+			}
+			
+			store( name, Counter.getURL(file));
+			print( "downloading :"+file +" as " + nub+name);
+		}
+		return names.toArray( new String[names.size()]);
 	}
 
 	static String takeOutSpecialCharacters(String s) {
@@ -136,19 +165,14 @@ public class Counter {
 		String[] tokens = text.split(" ");
 
 		Set<String> set = new HashSet<String>();
-
 		for (String token : tokens) {
 			set.add(takeOutSpecialCharacters(token));
 		}
 
 		List<Float> problist = new ArrayList<Float>();
-
 		for (String token : set) {
-
 			float f = calculateProbability(token);
-
-			if (f > 0.5f) {
-				// System.out.println( ""+ feature + ":"+ f);
+			if ( interesting(f) > 0 ) {
 				problist.add(f);
 			}
 		}
@@ -156,11 +180,17 @@ public class Counter {
 		Collections.sort(problist, new Comparator<Float>() {
 			@Override
 			public int compare(Float f1, Float f2) {
-				return  (int)(100*interesting(f2) - 100*interesting(f1)); //descending order
+				return  (int)(100*interesting(f2) - 100*interesting(f1)); //descending 
 			}
 		});
 
-		Float[] probabilities = problist.subList(0, 16).toArray(new Float[15]);
+		Float[] probabilities = null;
+		if( problist.size() > 15) {
+			probabilities = problist.subList(0, 16).toArray(new Float[15]);
+		}
+		else {
+			probabilities = problist.toArray(new Float[problist.size()]);
+		}
 
 		float product = mul(probabilities, false);
 		float oneMinusTerm = mul(probabilities, true);
@@ -170,18 +200,6 @@ public class Counter {
 		return (product / (product + oneMinusTerm));
 	}
 	
-	static String[] pullNStore(String nub, String[] files){
-		List<String> names = new ArrayList<String>();
-		for(String file : files){
-			String name = new File(file).getName();
-			name = name.substring( 0, name.indexOf("."));
-			//print(name);
-			names.add(name);
-			Counter.store( nub + name, Counter.getURL(file));
-		}
-		return names.toArray( new String[names.size()]);
-	}
-
 	public static void main(String[] args) {
 
 		String[] dickens = {"http://www.gutenberg.org/ebooks/1400.txt.utf8",
@@ -224,20 +242,24 @@ public class Counter {
 				"http://www.gutenberg.org/ebooks/18381.txt.utf8",
 				"http://www.gutenberg.org/ebooks/3187.txt.utf8"};
 		
-		int[] dickens = new int[]{1400,98,730,   766,    580};
-		int[] twains  = new int[]{76, 74, 10947, 19640,  30165 };
 		
-		for(int i = 0 ; i < 5 ; i++ ) {
-			Counter.train( Counter.getFile(dickens[i]), true);
-			System.out.println( "trained,dickens:"+ i);
+		String[] storedDickens = pullNStore( "dickens", Arrays.copyOfRange(dickens,0,5));
+		String[] storedTwain = pullNStore( "twain", Arrays.copyOfRange(twain,0,5));
+		
+		pullNStore( "twain", Arrays.copyOfRange(twain,6,7));
+		
+		for(String s : storedDickens) {
+			train( getFile(s), true);
+			print( "trained,dickens:"+ s);
 		}
 		
-		for(int i : twains ){
-			Counter.train( Counter.getFile(twain[i]), false);
-			System.out.println( "trained,twain:"+ i);
+		for(String s : storedTwain) {
+			train( getFile(s), false);
+			print( "trained,twain:"+ s);
 		}
-		float f = Counter.classify( Counter.getFile("twain1837") );
-		System.out.println( "is a twain book :" + f);
+		
+		float f = classify( getFile("twain1837") );
+		print( "is a twain book :" + f);
 	}
 
 }
