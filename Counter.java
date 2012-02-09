@@ -23,7 +23,7 @@ public class Counter {
     static Map<String, Integer> good = new HashMap<String, Integer>();
 	static Map<String, Integer> bad = new HashMap<String, Integer>();
 
-	static String[] specialCharacters = { ",", "#", ";", "\"", "\'", };
+	static String[] specialCharacters = { ",", "#", ";", "\"", "\'" };
 	static String empty = "";
 
 	static void print(String s) {
@@ -83,7 +83,7 @@ public class Counter {
 			}
 			
 			store( name, Counter.getURL(file));
-			print( "downloading :"+file +" as " + nub+name);
+			print( "downloading :"+file +" as " + name);
 		}
 		return names.toArray( new String[names.size()]);
 	}
@@ -92,7 +92,7 @@ public class Counter {
 		for (String p : specialCharacters) {
 			s = s.replaceAll(p, empty);
 		}
-		return s.toLowerCase();
+		return s.toLowerCase().trim();
 	}
 
 	static int count(Map<String, Integer> map) {
@@ -168,10 +168,13 @@ public class Counter {
 		for (String token : tokens) {
 			set.add(takeOutSpecialCharacters(token));
 		}
-
+		
 		List<Float> problist = new ArrayList<Float>();
 		for (String token : set) {
 			float f = calculateProbability(token);
+			if( f <= 0 ) 	{
+				continue;
+			}
 			if ( interesting(f) > 0 ) {
 				problist.add(f);
 			}
@@ -180,22 +183,34 @@ public class Counter {
 		Collections.sort(problist, new Comparator<Float>() {
 			@Override
 			public int compare(Float f1, Float f2) {
-				return  (int)(100*interesting(f2) - 100*interesting(f1)); //descending 
+				return  (int)(100*f1 - 100*f2);
 			}
 		});
 
+		for(Float fi : problist) {
+			print( ".) " + fi);
+		}
+
+
 		Float[] probabilities = null;
 		if( problist.size() > 15) {
-			probabilities = problist.subList(0, 16).toArray(new Float[15]);
+			//probabilities = problist.subList(0, 16).toArray(new Float[15]);
+			List<Float> tmpList = problist.subList(0,8);
+			tmpList.addAll( problist.subList(problist.size()-7,problist.size()-1) );
+			probabilities = tmpList.toArray(new Float[tmpList.size()]);
 		}
 		else {
 			probabilities = problist.toArray(new Float[problist.size()]);
 		}
 
+		for(Float fi : probabilities) {
+			print( "_ " + fi);
+		}
+
 		float product = mul(probabilities, false);
 		float oneMinusTerm = mul(probabilities, true);
 
-		print("[]" + product + "," + oneMinusTerm);
+		print("[/]" + product + "," + oneMinusTerm);
 
 		return (product / (product + oneMinusTerm));
 	}
@@ -246,13 +261,17 @@ public class Counter {
 		String[] storedDickens = pullNStore( "dickens", Arrays.copyOfRange(dickens,0,5));
 		String[] storedTwain = pullNStore( "twain", Arrays.copyOfRange(twain,0,5));
 		
-		pullNStore( "twain", Arrays.copyOfRange(twain,6,7));
+		if( args[0].equals("dickens") ) {
+			pullNStore( "dickens", new String[]{ dickens[Integer.parseInt(args[1])] } );
+		}
+		else {
+			pullNStore( "twain", new String[]{ twain[Integer.parseInt(args[1])] } );
+		}
 		
 		for(String s : storedDickens) {
 			train( getFile(s), true);
 			print( "trained,dickens:"+ s);
 		}
-		
 		for(String s : storedTwain) {
 			train( getFile(s), false);
 			print( "trained,twain:"+ s);
