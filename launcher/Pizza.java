@@ -162,9 +162,12 @@ public class Pizza {
 		frame.add(p, BorderLayout.CENTER);
 	}
 
-	public static void main(String args[])
+	public static void main(String args[]) throws Exception
 	{
-		Pizza o = new Pizza("Sausage Pizza", 400, 400, new SausageApplet());
+		String papplet = args[0];
+		Class c = Class.forName(papplet);
+		PApplet object = (PApplet)c.newInstance();
+		Pizza o = new Pizza("Sausage Pizza", 600, 200, object);
 	}
 
 }

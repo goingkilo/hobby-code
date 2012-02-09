@@ -9,43 +9,68 @@ from java.lang import Thread,InterruptedException
 
 
 def init():
-	MidiSystem.getSynthesizer()
+    MidiSystem.getSynthesizer()
 
-	synth = MidiSystem.getSynthesizer()
-	synth.open()
-	channels  = synth.getChannels()
-	bank = synth.getDefaultSoundbank();
-	synth.loadAllInstruments(bank)
-	instrs = synth.getLoadedInstruments()
-	return synth, channels, instrs
+    synth = MidiSystem.getSynthesizer()
+    synth.open()
+    channels  = synth.getChannels()
+    bank = synth.getDefaultSoundbank();
+    synth.loadAllInstruments(bank)
+    instrs = synth.getLoadedInstruments()
+    return synth, channels, instrs
 
 
 def sleep(s):
-	try :
-		Thread.sleep(s)
-	except InterruptedException,e:
-		print 'sleep interrupted'
-	
-def playloop():
-	while True:
+    try :
+        Thread.sleep(s)
+    except InterruptedException,e:
+        print 'sleep interrupted'
+    
+"""
+    try:
+        synth, channels, instrs = init()
+        instr = instrs[0]
+        p = instr.getPatch()
+        channels[0].programChange( p.getBank(), p.getProgram())
+        print 'get it on'
+        channels[0].noteOn( 72, 127 );    
+        sleep(1000)        
 
-try :
-	synth, channels, instrs = init()
-	instr = instrs[0]
-	p = instr.getPatch()
-	channels[0].programChange( p.getBank(), p.getProgram())
-	print 'get it on'
-	channels[0].noteOn( 72, 127 );	
-	sleep(1000)		
+        #sleep(10*60*1000)
 
-	#sleep(10*60*1000)
+        channels[0].noteOn( 32, 127 );    
+        sleep(1000)
 
-	channels[0].noteOn( 32, 127 );	
-	sleep(1000)
-
-except JEException,e:
-	print 'Erorr',e
-	from java.lang import System
-	System.exit(0)
+    except JEException,e:
+        print 'Erorr',e
+        from java.lang import System
+        System.exit(0)
+"""
 
 
+import sys
+synth, channels, instrs = init()
+instr = None
+channel = None
+while True:
+    a = raw_input('[i]nstrument, [p]lay, [q]uit :')
+    if a == 'i':
+        b1 = raw_input('\tchoose instrument [0-'+str(len(instrs))+'] :')
+        b2 = raw_input('\tchoose channel [0-'+str(len(channels)) +'] :')
+        instr = instrs[int(b1)]
+        patch = instr.getPatch()
+        channels[ int(b2) ].programChange( patch.getBank(), patch.getProgram())
+        channel = channels[int(b2)]
+    elif a == 'p':
+        while True:
+            n = raw_input('#/q :')
+            if n == 'q':
+                break
+            try :
+                channel.noteOn(ord(n),127)
+            except:
+               print 'error'
+            sleep(1000)
+    elif a == 'q':
+        break
+        
