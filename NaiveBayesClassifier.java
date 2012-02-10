@@ -18,7 +18,7 @@ import java.util.Set;
 
 import org.jsoup.Jsoup;
 
-public class Counter {
+public class NaiveBayesClassifier {
 
     static Map<String, Integer> good = new HashMap<String, Integer>();
 	static Map<String, Integer> bad = new HashMap<String, Integer>();
@@ -82,7 +82,7 @@ public class Counter {
 				continue;
 			}
 			
-			store( name, Counter.getURL(file));
+			store( name, getURL(file));
 			print( "downloading :"+file +" as " + name);
 		}
 		return names.toArray( new String[names.size()]);
