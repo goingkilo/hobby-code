@@ -7,27 +7,27 @@ public class Twanger extends Thread{
 
 	MidiChannel channel;
 	Random r = new Random(System.currentTimeMillis());
-	public boolean 		playing = false;
-
+	boolean on = false;
 	long sleep;
-
 
 	public Twanger( MidiChannel c, Instrument i, long sleep ){
 		this.channel = c;
 		Patch patch = i.getPatch();
 		channel.programChange(patch.getBank(), patch.getProgram());
 		this.sleep = sleep;
-
-		this.setOn(true);
 	}
-
 
 	public void run(){
 		while(true) 
 		{
-			int note = (int)(r.nextFloat()  * 100);
-			if( note > 88 ) note = 88;
-			playNote( note );
+			if( on ) {
+				int note = (int)(r.nextFloat()  * 100);
+				if( note > 88 ) note = 88;
+				playNote( note );
+			}
+			else {
+				try{ Thread.sleep(10); } catch(InterruptedException e){}
+			}
 		}
 	}
 
@@ -36,8 +36,4 @@ public class Twanger extends Thread{
 		channel.noteOn(note, 127);
 		try { Thread.sleep(sleep); } catch(InterruptedException e){}
 	}	
-
-	public void setOn(boolean b){
-		this.playing = b;
-	}
 }
