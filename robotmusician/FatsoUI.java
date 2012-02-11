@@ -60,9 +60,9 @@ public class FatsoUI {
                 try {
                         
 			fatso = new Fatso();
-			fatso.add( "Piano", fatso.channels[2], fatso.instruments[0], 1200l);
-			fatso.add( "NatStlGtr", fatso.channels[1], fatso.instruments[24], 1000l);
-			fatso.add( "NatStlGtr", fatso.channels[0], fatso.instruments[24], 800l);
+//		fatso.add( "Piano", fatso.channels[2], fatso.instruments[0], 1200l);
+	//		fatso.add( "NatStlGtr", fatso.channels[1], fatso.instruments[24], 1000l);
+	//		fatso.add( "NatStlGtr", fatso.channels[0], fatso.instruments[24], 800l);
                 }
                 catch(Exception e) {
                         throw e;
