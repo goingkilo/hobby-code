@@ -13,7 +13,7 @@ public class Fatso  {
 	Instrument[] instruments;
 	List<Twanger> twangers = new ArrayList<Twanger>();
 
-	public Fatso(){
+	public Fatso() throws Exception {
 		try
 		{
 			Synthesizer synth = MidiSystem.getSynthesizer();
@@ -27,6 +27,7 @@ public class Fatso  {
 		}
 		catch(Exception e) {
 			e.printStackTrace();
+			throw e;
 		}
 	}
 
