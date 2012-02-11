@@ -21,8 +21,7 @@ public class Twanger extends Thread{
 		while(true) 
 		{
 			if( on ) {
-				int note = (int)(r.nextFloat()  * 100);
-				if( note > 88 ) note = 88;
+				int note = (int)(r.nextFloat()  * 80);
 				playNote( note );
 			}
 			else {
@@ -37,3 +36,4 @@ public class Twanger extends Thread{
 		try { Thread.sleep(sleep); } catch(InterruptedException e){}
 	}	
 }
+

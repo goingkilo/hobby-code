@@ -49,7 +49,9 @@ public class FatsoUI {
 			frame.setVisible(true);
 		}
 		catch(Exception e) {
-			JOptionPane.showMessageDialog( frame, "Something went wrong, the error message is :" + e.getMessage() );
+			JOptionPane.showMessageDialog( frame, "Something went wrong, the error message is  -\n" + e.getMessage()
+                                                              + " \ndrop a line to reddit-user lani at http://www.reddit.com/user/lani/" 
+				                              + " " );
 			System.exit(0);
 		}
 	}
