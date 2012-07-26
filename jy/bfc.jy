@@ -1,4 +1,4 @@
-##
+#!/home/kilo/jython2.5.2/jython
 ## brainfuck interpreter. very nice.
 ## always append to the last item in the list
 
