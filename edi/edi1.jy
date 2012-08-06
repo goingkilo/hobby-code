@@ -1,0 +1,37 @@
+
+from javax.swing import JFrame, JPanel, JButton, JTextPane, BoxLayout, JLabel, JMenuBar,JMenu
+from java.awt.event import ActionEvent, ActionListener
+
+def makeFrame():
+frame = JFrame()
+frame.setSize( 800, 400)
+frame.setLocationRelativeTo(None)
+frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
+
+
+panel = JPanel()
+panel.setLayout( BoxLayout( panel, BoxLayout.Y_AXIS))
+
+input = JTextPane()
+output = JTextPane()
+
+go = JButton('go')
+
+def func1(e1):
+	code = input.getText()
+	a = eval(code)
+	output.setText( str(a))
+
+go.addActionListener( func1)
+
+panel.add( input)
+panel.add( go)
+panel.add( output)
+
+menubar = JMenuBar()
+menu1 = JMenu('1')
+menubar.add
+
+frame.getContentPane().add( panel)
+
+frame.setVisible(1)

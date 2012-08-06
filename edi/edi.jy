@@ -1,0 +1,27 @@
+
+from javax.swing import JFrame,JPanel,BoxLayout,JPanel,JTextArea,JTextPane,JButton,JFileChooser, JMenu,JMenuBar, JMenuItem, JOptionPane
+from java.awt import BorderLayout,KeyEvent, Font, GraphicsEnvironment, ActionEvent,ActionListener, KeyEvent, KeyListener
+from java.io import File,FileInputStream, FileOutputStream
+from javax.sound.sampled import Clip,AudioSystem, AudioInputStream
+
+
+frame  = JFrame()
+frame.setTitle('edi')
+frame.setSize(400,600)
+frame.setLocationRelativeTo(None)
+
+panel = JPanel()
+layout = BoxLayout(panel, BoxLayout.Y_AXIS)
+panel.setLayout(layout)
+
+input = JTextArea()
+output = JTextPane()
+button = JButton('run')
+
+panel.add(input)
+panel.add(output)
+panel.add(button)
+
+frame.getContentPane().add(panel)
+
+frame.setVisible(True)
