@@ -1,0 +1,19 @@
+lines = {6:'- - *' ,7 : '---' ,8 : '- -' ,9 : '--- *' }  
+
+ hex = function () {  
+
+ ret = [];   
+
+for(var x = 0;  x < 6 ; x ++)    {        sum = 0;        sum += toss();        sum+= toss();        sum += toss();        ret.push(sum);              }    
+
+for( var x = 0 ; x < 6 ; x ++) {        console.log( lines[ret[5-x]]);        
+
+} 
+
+};   
+
+ 
+
+toss = function(){if  ( Math.random() > 0.5 ) return 3 ; else return 2;}     
+
+hex()
