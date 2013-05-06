@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+	<canvas id="myCanvas" width="800" height="600"  align="right"  ;>
+		Your browser does not support the HTML5 canvas tag.</canvas>
+
+	<script>
+
+var c=document.getElementById("myCanvas");
+var ctx=c.getContext("2d");
+
+var afont = "18px Arial";
+
+function putLine(){ 
+	ctx.moveTo(0,0);
+	ctx.lineTo(800,600);
+	ctx.stroke();
+}
+ 
+function putCircle(){
+	ctx.beginPath();
+	ctx.arc(95,50,40,0,2*Math.PI);
+	ctx.stroke();
+}
+
+function put_text(x, y, afont, atext, ctx) {
+	ctx.font= afont ;
+	ctx.fillText( atext, x, y);
+}
+
+function yang( x, y, w, h, ctx) {
+ 
+	ctx.fillRect(x,y, w,h);
+}
+
+function yin( x, y, w, h, ctx) {
+  
+	ctx.fillRect(x, y, w/3, h);
+	ctx.fillRect(x + 2*w/3, y, w/3,h);
+}
+
+
+toss = function(){if  ( Math.random() > 0.5 ) return 3 ; else return 2;}
+
+genhex = function () {  
+
+ 	ret = [];   
+
+	for(var x = 0;  x < 6 ; x ++)    {        
+		sum = 0;        
+		sum += toss();        
+		sum+= toss();        
+		sum += toss();        
+		ret.push(sum);              
+	}    
+
+	return ret;
+};   
+
+linefunction = { 6:yin ,7 : yang ,8 : yin ,9 : yang }
+
+function drawhex( x, y, lines, ctx) {
+
+	lwidth = 100;
+	lheight = 20;
+	lgap 	= 5;
+	loffset = 0;
+
+	for( var i = 0 ; i < lines.length ; i++) {
+		if( i > 2 ) {
+			loffset = 10;	
+		}
+		console.log( i + "," + loffset);
+		linefunction[lines[i]]( x, y + (lgap +lheight)*i + loffset, lwidth, lheight, ctx);
+	} 
+}
+ 
+function hextext(x,y,a) {
+	ctx.font = afont;
+	ctx.fillText( a, x,y);
+	console.log("alons!! " +  ctx.measureText(a).width );
+}
+  
+a = genhex();
+drawhex( 200, 100, a, ctx);
+hextext( 400, 100, "Randomly generated hexagram");
+
+
+
+</script>
+
+
+</body>
+</html>
+
