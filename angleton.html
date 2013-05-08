@@ -1,10 +1,21 @@
 <!DOCTYPE html>
 <html>
+<style>
+	.fdiv {
+		color: #FFF;
+		background : #00f;
+		font-size: 18px;
+		margin: 10px;
+	}
+</style>
 <body>
-
-	<canvas id="myCanvas" width="800" height="600"  align="right"  ;>
+	<div class="fdiv">
+<span>Angleton</span>
+	</div>
+	<div>
+	<canvas id="myCanvas" width="400" height="400"  align="right"  ;>
 		Your browser does not support the HTML5 canvas tag.</canvas>
-
+	</div>
 	<script>
 
 var c=document.getElementById("myCanvas");
@@ -84,13 +95,14 @@ function hextext(x,y,a) {
   
 a = genhex();
 drawhex( 200, 100, a, ctx);
-hextext( 400, 100, "Randomly generated hexagram");
+hextext( 400, 100, " thunder");
 
 
 
 </script>
-
+<div class="fdiv">
+Refresh for a new Hexagram
+</div>
 
 </body>
 </html>
-
