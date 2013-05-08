@@ -9,47 +9,56 @@
 	}
 </style>
 <body>
+
+
 	<div class="fdiv">
-<span>Angleton</span>
+		<span>Angleton</span>
 	</div>
 	<div>
-	<canvas id="myCanvas" width="400" height="400"  align="right"  ;>
-		Your browser does not support the HTML5 canvas tag.</canvas>
+		<tr>
+			<td>
+				<canvas id="canvas1" width="300" height="300"  align="1"  style="border:1px solid #00F;"  >
+				Your browser does not support the HTML5 canvas tag.
+		 		</canvas>
+			</td>
+			<td>
+				<canvas id="canvas2" width="300" height="300"  align="1"  style="border:1px solid #00F;"  >
+				Your browser does not support the HTML5 canvas tag.
+		 		</canvas>
+			</td>
+
+			<td>
+				<canvas id="canvas3" width="300" height="300"  align="1"  style="border:1px solid #00F;"  >
+				Your browser does not support the HTML5 canvas tag.
+		 		</canvas>
+			</td>		
+			<td>
+				<canvas id="canvas4" width="300" height="300"  align="1"  style="border:1px solid #00F;"  >
+				Your browser does not support the HTML5 canvas tag.
+		 		</canvas>
+			</td>		
+		</tr>
+
+	 
 	</div>
-	<script>
+	<div class="fdiv">
+		Refresh for a new Hexagram
+	</div>
 
-var c=document.getElementById("myCanvas");
-var ctx=c.getContext("2d");
 
-var afont = "18px Arial";
 
-function putLine(){ 
-	ctx.moveTo(0,0);
-	ctx.lineTo(800,600);
-	ctx.stroke();
-}
- 
-function putCircle(){
-	ctx.beginPath();
-	ctx.arc(95,50,40,0,2*Math.PI);
-	ctx.stroke();
-}
+<script>
 
-function put_text(x, y, afont, atext, ctx) {
-	ctx.font= afont ;
-	ctx.fillText( atext, x, y);
-}
 
-function yang( x, y, w, h, ctx) {
- 
+yang = function ( x, y, w, h, ctx) {
 	ctx.fillRect(x,y, w,h);
-}
+};
 
-function yin( x, y, w, h, ctx) {
+yin = function ( x, y, w, h, ctx) {
   
 	ctx.fillRect(x, y, w/3, h);
 	ctx.fillRect(x + 2*w/3, y, w/3,h);
-}
+};
 
 
 toss = function(){if  ( Math.random() > 0.5 ) return 3 ; else return 2;}
@@ -71,12 +80,14 @@ genhex = function () {
 
 linefunction = { 6:yin ,7 : yang ,8 : yin ,9 : yang }
 
-function drawhex( x, y, lines, ctx) {
+function drawhex( x, y,  lwidth, lheight, lgap, loffset, canvasid ){
 
-	lwidth = 100;
-	lheight = 20;
-	lgap 	= 5;
-	loffset = 0;
+	var c=document.getElementById(canvasid );
+	var ctx=c.getContext("2d");
+	var afont = "18px Arial";
+
+	
+	var lines = genhex();
 
 	for( var i = 0 ; i < lines.length ; i++) {
 		if( i > 2 ) {
@@ -87,22 +98,17 @@ function drawhex( x, y, lines, ctx) {
 	} 
 }
  
-function hextext(x,y,a) {
-	ctx.font = afont;
-	ctx.fillText( a, x,y);
-	console.log("alons!! " +  ctx.measureText(a).width );
-}
-  
-a = genhex();
-drawhex( 200, 100, a, ctx);
-hextext( 400, 100, " thunder");
+lwidth = 100;
+lheight = 20;
+lgap = 5;
+loffset = 0;
 
-
+drawhex(100,70,lwidth, lheight, lgap, loffset,'canvas1');
+drawhex(100,70,lwidth, lheight, lgap, loffset,'canvas2');
+drawhex(100,70,lwidth, lheight, lgap, loffset,'canvas3');
+drawhex(100,70,lwidth, lheight, lgap, loffset,'canvas4');
 
 </script>
-<div class="fdiv">
-Refresh for a new Hexagram
-</div>
-
+	
 </body>
 </html>
