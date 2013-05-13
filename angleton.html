@@ -12,49 +12,9 @@
 	 	font-size: 11px;
 		margin: 10px;
 	}
-</style>
-<body>
-
-
-	<div class="fdiv">
-		<span>Angleton</span>
-	</div>
-	<div align="center">
-		<tr>
-			<td>
-				<canvas id="canvas1" width="300" height="300"  style="border:1px solid #00F;"  >
-				Your browser does not support the HTML5 canvas tag.
-		 		</canvas>
-			</td>
-			<td>
-				<canvas id="canvas2" width="300" height="300"  style="border:1px solid #00F;"  >
-				Your browser does not support the HTML5 canvas tag.
-		 		</canvas>
-			</td>
-
-			<td>
-				<canvas id="canvas3" width="300" height="300" style="border:1px solid #00F;"  >
-				Your browser does not support the HTML5 canvas tag.
-		 		</canvas>
-			</td>		
-			<td>
-				<canvas id="canvas4" width="300" height="300"  align="1"  style="border:1px solid #00F;"  >
-				Your browser does not support the HTML5 canvas tag.
-		 		</canvas>
-			</td>		
-		</tr>
-
-	 
-	</div>
-	<div class="fdiv"  align="center">
-		<span class="bttxt">Refresh for a new Hexagram</span>
-	</div>
-
-
-
+</style> 
+<script src="jquery-1.9.1.min.js"></script>
 <script>
-
-
 yang = function ( x, y, w, h, ctx) {
 	ctx.fillRect(x,y, w,h);
 };
@@ -109,11 +69,40 @@ lgap = 5;
 loffset = 0;
 
 drawhex(100,70,lwidth, lheight, lgap, loffset,'canvas1');
-drawhex(100,70,lwidth, lheight, lgap, loffset,'canvas2');
-drawhex(100,70,lwidth, lheight, lgap, loffset,'canvas3');
-drawhex(100,70,lwidth, lheight, lgap, loffset,'canvas4');
-
+ 
 </script>
-	
+
+<script>
+	$(document).ready( function() 
+		{
+			drawhex(100,70,lwidth, lheight, lgap, loffset,'canvas1');
+
+		});
+</script>
+
+<body>
+
+
+	<div class="fdiv">
+		<span>Angleton</span>
+	</div>
+	<div align="center">
+		<tr>
+			<td>
+				<canvas id="canvas1" width="300" height="300"  style="border:1px solid #00F;"  >
+				Your browser does not support the HTML5 canvas tag.
+		 		</canvas>
+			</td>
+			<td>
+				<b> Chien </b><i>  thunder</i>
+  			</td>
+ 		</tr>
+
+	 
+	</div>
+	<div class="fdiv"  align="center">
+		<span class="bttxt">Refresh for a new Hexagram</span>
+	</div>
+
 </body>
 </html>
