@@ -1,15 +1,17 @@
-the aim is to have fun
-  
-the aim is to be good for nothing
-  
-and to file it properly  
+1. scheme editor/ ide ( java, clojure  )
+2. piano playing program. it's not very good yet (java,swing,processing)
+3. i ching - hexagram generator - ( javascript canvas )
+4. 3d display of information (java, processing )
+5. 'naive bayes classifier' (java. downloads from the net, stores locally etc )
+6. some dabblings in clojure and jython . they all work (for a _small_ value of 'work')
 
 
-prototypes, POCs, ideas
-js,clojure, dopewars,texteditor, iching etc,processing
+- edi and scythe are almost repeats. edi.clj too
+- scythe needs sisc scheme to work, and a file location
+- robot musician can use GAs ,maybe
+- at some point in the future, we can connect the robotmusician to a pulse detector. bio feedback !!
+- reddit needs a lot of attention. redditspace begs creating 
+- 3d data in processing.js seems like a good idea
+- 
 
-workouts  
-clojure, hadoop,js, 
-  
-projects
-text layout  
+- one day I'll have a website that accepts cash 
