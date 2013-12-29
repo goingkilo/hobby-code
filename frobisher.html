@@ -1,0 +1,48 @@
+
+<html>
+	<script src="./jquery-1.9.0.js"></script>
+	<script src="./jquery.blockui.js"></script>
+	
+<script>
+	function goto_dengo() {	
+		$.blockUI({ message: '<h1><img src="busy.gif" /> Just a moment...</h1>' });
+		console.log( 'hello world');
+		diversion();
+		setTimeout( $.unblockUI, 3000 );
+		console.log('something something');
+	}
+
+	function diversion(){
+		console.log('diversion start');
+		
+		function reqListener () {
+  			console.log(this.responseText);
+		}
+
+		var oReq = new XMLHttpRequest();
+		oReq.onload = reqListener;
+		oReq.open("get", "yourFile.txt", true);
+		oReq.send();
+		console.log('diversion end');
+	}
+
+	$(document).ready( function() {
+	
+		$('#hello').click( function () {
+			goto_dengo();
+		});
+	});
+</script>
+
+	<div>
+		<h1>  Frobisher </h1>
+	</div>
+
+	<div align=center>
+		<canvas id="myCanvas" width="800" height="400"style="border:1px solid #000000;"></canvas>
+	</div>
+
+	<div>
+		<input type="submit" id="hello">
+	</div>
+</html>
