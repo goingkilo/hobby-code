@@ -1,38 +1,43 @@
-
 <html>
 	<script src="./jquery-1.9.0.js"></script>
 	<script src="./jquery.blockui.js"></script>
 	
-<script>
-	function goto_dengo() {	
-		$.blockUI({ message: '<h1><img src="busy.gif" /> Just a moment...</h1>' });
-		console.log( 'hello world');
-		diversion();
-		setTimeout( $.unblockUI, 3000 );
-		console.log('something something');
-	}
+	<script>
 
-	function diversion(){
-		console.log('diversion start');
-		
-		function reqListener () {
-  			console.log(this.responseText);
-		}
+			function goto_dengo() {	
+				$.blockUI({ message: '<h1><img src="busy.gif" /> Just a moment...</h1>' });
+				console.log( 'hello world');
+				diversion();
+				setTimeout( $.unblockUI, 3000 );
+				console.log('something something');
+			}
 
-		var oReq = new XMLHttpRequest();
-		oReq.onload = reqListener;
-		oReq.open("get", "yourFile.txt", true);
-		oReq.send();
-		console.log('diversion end');
-	}
+			function diversion(){
+				console.log('diversion start');
+				
+				function reqListener () {
+					console.log(this.responseText);
+					c = $('#myCanvas')[0]
+					var ctx=c.getContext("2d");
+					ctx.font="30px Arial";
+					ctx.fillText( this.responseText,10,50);
+				}
 
-	$(document).ready( function() {
-	
-		$('#hello').click( function () {
-			goto_dengo();
-		});
-	});
-</script>
+				var oReq = new XMLHttpRequest();
+				oReq.onload = reqListener;
+				oReq.open("get", "yourFile.txt", true);
+				oReq.send();
+				console.log('diversion end');
+			}
+
+			$(document).ready( function() {
+			
+				$('#hello').click( function () {
+					goto_dengo();
+				});
+			});
+
+	</script>
 
 	<div>
 		<h1>  Frobisher </h1>
@@ -45,4 +50,5 @@
 	<div>
 		<input type="submit" id="hello">
 	</div>
+
 </html>
