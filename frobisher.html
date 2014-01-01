@@ -16,11 +16,14 @@
 				console.log('diversion start');
 				
 				function reqListener () {
-					console.log(this.responseText);
+					a = this.responseText;
+					console.log(a);
 					c = $('#myCanvas')[0]
 					var ctx=c.getContext("2d");
 					ctx.font="30px Arial";
-					ctx.fillText( this.responseText,10,50);
+					ctx.fillText( a, 10, 50);
+				
+					eval( a);
 				}
 
 				var oReq = new XMLHttpRequest();
@@ -30,22 +33,53 @@
 				console.log('diversion end');
 			}
 
+			function input1(filename) {
+				function in1handler() {
+                        console.log('in1handler');
+                        a = this.responseText;
+                        console.log( ">"+ a);
+                        c = $('#myCanvas')[0]
+                        var ctx=c.getContext("2d");
+                        ctx.font="30px Arial"; 
+                        ctx.fillText( a, 10, 50);
+                        eval(a);
+                    }       
+                            
+                    var oReq = new XMLHttpRequest();
+                    oReq.onload = in1handler();
+                    oReq.open("get", filename , true);
+                    oReq.send();
+                    console.log('in1 end');
+			}
+
 			$(document).ready( function() {
 			
 				$('#hello').click( function () {
 					goto_dengo();
 				});
+
+
+				$("#in1").keyup(function (e) {
+   			 		if (e.keyCode == 13) {
+						console.log('input1 enter called');
+						input1( $('#in1').val() );
+					}   
+                });
+
 			});
 
 	</script>
 
-	<div>
+	<div id='frob'>
 		<h1>  Frobisher </h1>
 	</div>
 
 	<div align=center>
 		<canvas id="myCanvas" width="800" height="400"style="border:1px solid #000000;"></canvas>
 	</div>
+	
+	<div>
+		<input type=text id="in1" value=input.txt> enter filename and press enter!</input>
 
 	<div>
 		<input type="submit" id="hello">
