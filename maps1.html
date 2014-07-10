@@ -1,0 +1,69 @@
+<html>
+	<head>
+		 <link rel="stylesheet" href="./leaflet-0.7.3/leaflet.css" />
+		 <style>
+			#map {  
+					width:800px; 
+					height: 480px;
+					margin:0 auto; 
+				}
+		</style>
+	</head>
+	<body>
+		<script src="./leaflet-0.7.3/leaflet.js"></script>	
+		
+
+		<div>
+			<button onClick="javascript:goto('Berlin')">Berlin</button>
+			<button onClick="javascript:goto('Chicago')">Chicago</button>
+			<button onClick="javascript:goto('Tokyo')">Tokyo</button>
+			<button onClick="javascript:goto('London')">London</button>
+		</div>
+		
+		<div>cocaine</div>
+		<div>cocaine</div>
+		<div>cocaine</div>
+		<div>cocaine</div>
+		<div>cocaine</div>
+		
+		<div id="map"></div>
+		
+		
+		<script>
+			zoom = 13;
+			city = 0;
+			
+			cities = { 'London': [51.5, -0.09] , 'Berlin':[52.5167 , 13.3833], 'Chicago':[41.8819, -87.6278], 'Tokyo':[35.6800, 139.7700]} 
+			cityll = [  [51.5, -0.09] , [52.5167 , 13.3833],  [41.8819, -87.6278],  [35.6800, 139.7700]] 
+			
+			
+			function getcity(){
+				city += 1;
+				city %= cityll.length;
+				console.log( '==>' +cityll[city] );
+				return cityll[city];
+			}
+			
+			
+			
+			target = getcity();
+			console.log( 'going to  ' +cityll[city] );
+			
+			var map = L.map('map').setView( target, 12);
+			L.tileLayer('http://{s}.tiles.mapbox.com/v3/karthikraghu.inhhgekd/{z}/{x}/{y}.png', {
+				attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+				maxZoom: 85
+			}).addTo(map);
+			
+			map.on('zoomend', function(e) { console.log( map.getZoom()) } );
+			
+			function goto(city) {
+				target = cities[city];
+				map.setView( target, 12);
+				var marker = L.marker( target).addTo(map);
+			}
+		</script>
+		
+	
+	</body>
+</html>
