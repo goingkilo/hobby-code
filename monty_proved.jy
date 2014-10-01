@@ -1,4 +1,15 @@
-#monty hall proved in code 
+
+#update 10/1
+#I now understand how this works
+# your chance of missing the car is 2/3, hence 2/3rd  of the time, the car is behind
+# one of the two doors you have NOT chosen
+# then Monty conveniently eliminates the door with the goat from the two 
+# so by switching, you get the one door behind which the car sits, assuming
+# you missed the car in your first pick
+
+
+#monty hall verified  in code 
+
 
 from java.util import Random
 from java.lang import System
