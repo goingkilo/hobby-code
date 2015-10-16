@@ -1,4 +1,4 @@
-package cascade1;
+package com.goingkilo.hobby;
 
 public class Point {
     float x,y,z;

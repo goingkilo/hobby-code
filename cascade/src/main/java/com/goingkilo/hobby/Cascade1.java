@@ -1,4 +1,5 @@
-package cascade1;
+package com.goingkilo.hobby;
+
 import java.awt.BorderLayout;
 import java.awt.event.KeyEvent;
 
@@ -11,7 +12,7 @@ public class Cascade1 extends PApplet {
 	World world ;
 	
 	public void setup () {
-		size(800,600,P3D);
+		size(800,600,P2D);
 		background(0);
 		
 		world = new World(this);

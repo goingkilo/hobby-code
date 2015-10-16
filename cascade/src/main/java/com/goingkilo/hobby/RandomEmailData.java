@@ -1,15 +1,11 @@
-package cascade1;
+package com.goingkilo.hobby;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
-import cascade.Data;
-import cascade.Point;
+public class RandomEmailData  {
 
-public class RandomEmailData extends Data {
-
-	@Override
 	public List<Point> getPoints() {
 
 		Random r = new Random(System.currentTimeMillis());
