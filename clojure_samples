@@ -1,0 +1,36 @@
+
+   ;; ls -lrt 
+    
+    (defn display-file [f]  
+            (str " " (if (.isFile f) "-" "d") 
+                 (if (.canRead f) "r" "_") 
+                 (if (.canWrite f) "w" "_") 
+                 (if (.canExecute f) "x" "_") 
+                 
+                 " " (.length f)
+                 " " (.format (java.text.SimpleDateFormat. "MM/dd/yyyy") (new java.util.Date (.lastModified f)))
+                 " " (.getName f) ))
+
+
+
+    (defn display-prompt [batches]
+        (when (> (count batches) 0)
+            (let [batch (first batches)]
+                (do
+                    (doseq [entry batch] 
+                        (println (display-file entry)))
+                    
+                    (println "Continue y/n")
+                    
+                    (when (.equalsIgnoreCase  (->  (new Scanner (System/in)) .next) "y")  
+                        (recur (rest batches))) ))))
+
+
+    (defn list-files 
+        ([f] (list-files f 10))
+        ([f pagesize]
+            (let [ entries (.listFiles (File. f)) ]
+                (if ( > (count entries) pagesize )
+                     (display-prompt (partition pagesize entries))
+                     (display-prompt (list entries))))))
+~                                                                     
