@@ -1,6 +1,9 @@
 
    ;; ls -lrt 
-    
+(import 'java.util.Scanner)
+
+(import 'java.io.File)
+
     (defn display-file [f]  
             (str " " (if (.isFile f) "-" "d") 
                  (if (.canRead f) "r" "_") 
@@ -20,9 +23,9 @@
                     (doseq [entry batch] 
                         (println (display-file entry)))
                     
-                    (println "Continue y/n")
+                    (println ":")
                     
-                    (when (.equalsIgnoreCase  (->  (new Scanner (System/in)) .next) "y")  
+                    (when (.equalsIgnoreCase  (->  (new Scanner (System/in)) .next) " ")  
                         (recur (rest batches))) ))))
 
 
@@ -33,4 +36,4 @@
                 (if ( > (count entries) pagesize )
                      (display-prompt (partition pagesize entries))
                      (display-prompt (list entries))))))
-~                                                                     
+                                                                
