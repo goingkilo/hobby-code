@@ -1,8 +1,7 @@
 
    ;; ls -lrt 
-(import 'java.util.Scanner)
-
-(import 'java.io.File)
+   (import 'java.util.Scanner)
+   (import 'java.io.File)
 
     (defn display-file [f]  
             (str " " (if (.isFile f) "-" "d") 
