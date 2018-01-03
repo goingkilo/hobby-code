@@ -23,9 +23,9 @@
                     (doseq [entry batch] 
                         (println (display-file entry)))
                     
-                    (println ":")
+                    (println "Continue y/n:")
                     
-                    (when (.equalsIgnoreCase  (->  (new Scanner (System/in)) .next) " ")  
+                    (when (.equalsIgnoreCase  (->  (new Scanner (System/in)) .next) "y")  
                         (recur (rest batches))) ))))
 
 
