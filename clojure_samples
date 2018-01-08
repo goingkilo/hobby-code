@@ -36,3 +36,13 @@
                      (display-prompt (partition pagesize entries))
                      (display-prompt (list entries))))))
                                                                 
+
+(str (if (.isDirectory (File. ".")) "d" "-") (if (.canRead (File. ".")) "r" "-") (if (.canWrite (File. ".")) "w" "-") (if (.canExecute (File. ".")) "x" "-") " " (.length (File. ".")))
+
+
+(def byte-sizes [ "B" "KB" "MB" "GB" "TB" ])
+
+(defn get-size [ size sizes ret ret-type] 
+ 	( if (> (/ size 1024) 1) 
+ 		(recur (/ size 1024) (rest sizes) (float (/ size 1024)) (first sizes )) 
+ 		(str ret " " ret-type)))
