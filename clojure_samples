@@ -46,3 +46,5 @@
  	( if (> (/ size 1024) 1) 
  		(recur (/ size 1024) (rest sizes) (float (/ size 1024)) (first sizes )) 
  		(str ret " " ret-type)))
+      
+(defmacro file-method-apply [file method] `(. ~file ~method))
